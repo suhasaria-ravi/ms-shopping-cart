@@ -29,8 +29,6 @@ public class CheckOutCustomerTest {
 	int responseValue;
 	String resultName;
 
-	@Value("${localhost.uri.ravisu}")
-	private static String localhostvalue;
 
 	@Autowired
 	private Environment environment;
@@ -40,23 +38,6 @@ public class CheckOutCustomerTest {
 	@When("^client requests POST on (.*) with json data:$")
 	public String client_requests_POST_on(String resourceUri, String jsonData) throws Throwable {
 				
-
-		log.info("Config URL from test case :" + resourceUri);
-
-		log.info("Localhost value read as :" + localhostvalue);
-		
-		if((localhostvalue==null) && (environment!=null)){
-			log.info("Value read from env : " + environment.getProperty("localhost.uri.ravisu"));
-			localhostvalue=environment.getProperty("localhost.uri.ravisu");
-		}
-		
-		if (localhostvalue != null) {
-			resourceUri = resourceUri.replace("localhost.uri.ravisu.test", localhostvalue);
-		}else
-		{
-			resourceUri= resourceUri.replace("localhost.uri.ravisu.test", "localhost");
-		}
-		
 		log.info("Connecting to URL after getting value from properties file :" + resourceUri);
 
 		RestTemplate restTemplate = new RestTemplate();
