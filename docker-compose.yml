@@ -1,0 +1,78 @@
+version : "2.1"
+services:
+
+        
+  eureka:
+    image: ravisuhasaria/ms-shopping-cart:eureka
+    container_name: eureka
+    hostname: eureka
+    environment:
+      - RABBIT_MQ_HOST=${RABBIT_MQ_HOST}
+    ports:
+      - "8761:8761"
+    networks:
+      - ms-network
+    volumes:
+      - ${HOME}/jarloc_sc:/data
+    command: -jar -Dspring.profiles.active=docker /data/shopping-cart-netflix-eureka-0.0.1-SNAPSHOT.jar
+    healthcheck:
+      test: curl --fail -s http://localhost:8761/info || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3 
+
+
+  customer1:
+    image: ravisuhasaria/ms-shopping-cart:customer1
+    container_name: customer1
+    environment:
+      - RABBIT_MQ_HOST=${RABBIT_MQ_HOST}    
+    ports:
+     - "8001:8001"
+    networks:
+      - ms-network
+    volumes:
+      - ${HOME}/jarloc_sc:/data
+    command: -jar -Dspring.profiles.active=docker   /data/shopping-cart-customer-0.0.1-SNAPSHOT.jar
+    depends_on:
+       eureka:
+         condition: service_started 
+
+          
+  item1:
+    image: ravisuhasaria/ms-shopping-cart:item1
+    container_name: item1
+    environment:
+      - RABBIT_MQ_HOST=${RABBIT_MQ_HOST}    
+    ports:
+     - "8002:8002"
+    networks:
+      - ms-network
+    volumes:
+      - ${HOME}/jarloc_sc:/data
+    command: -jar -Dspring.profiles.active=docker   /data/shopping-cart-item-0.0.1-SNAPSHOT.jar
+    depends_on:
+       customer1:
+         condition: service_started
+
+         
+  order1:
+    image: ravisuhasaria/ms-shopping-cart:order1
+    container_name: order1
+    environment:
+      - RABBIT_MQ_HOST=${RABBIT_MQ_HOST}    
+    ports:
+     - "8003:8003"
+    networks:
+      - ms-network
+    volumes:
+      - ${HOME}/jarloc_sc:/data
+    command: -jar -Dspring.profiles.active=docker   /data/shopping-cart-order-0.0.1-SNAPSHOT.jar
+    depends_on:
+       item1:
+         condition: service_started                 
+                     
+         
+
+networks:
+  ms-network:

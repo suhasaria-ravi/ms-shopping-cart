@@ -1,0 +1,56 @@
+spring:
+  application:
+     name: shopping-cart-customer
+  profiles:
+    active: "dev"
+  main:
+    banner-mode: "off"  
+  freemarker:
+    enabled: false           # Ignore Eureka dashboard FreeMarker templates
+  zipkin:
+    base-url: http://localhost:9411/ 
+  sleuth:
+    sampler:
+      percentage: 0.4
+    zuul:
+      enabled: true  
+      
+eureka:
+   instance:
+       leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
+       preferIpAddress: true   
+      
+server:
+  port: 8001
+  connection-timeout: 10000
+
+---
+
+spring:
+  profiles: dev
+  jpa:   
+    hibernate:
+      show-sql: true   
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/     
+  
+---
+
+spring:
+  profiles: docker
+  jpa:   
+    hibernate:
+      show-sql: true
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST}
+    port: 5672
+    username: guest
+    password: guest
+    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka/     

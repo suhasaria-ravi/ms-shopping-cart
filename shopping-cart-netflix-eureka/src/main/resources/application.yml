@@ -1,0 +1,40 @@
+spring:
+  application:
+     name: shopping-cart-netflix-eureka
+  profiles:
+    active: "dev"
+
+
+      
+eureka:
+  instance:
+    hostname: localhost         #${discovery.hostname:localhost}
+  client:  # Not a client, don't register with yourself
+    registerWithEureka: false
+    fetchRegistry: false   
+        
+server:
+  port: 8761
+  #connection-timeout: 10000
+
+---
+
+spring:
+  profiles: dev
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  
+  
+---
+
+spring:
+  profiles: docker
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST}
+    port: 5672
+    username: guest
+    password: guest
+       
