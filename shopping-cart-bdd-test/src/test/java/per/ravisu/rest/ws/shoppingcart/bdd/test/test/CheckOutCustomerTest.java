@@ -24,7 +24,7 @@ import cucumber.api.java.en.When;
 
 public class CheckOutCustomerTest {
 
-	private static final Logger log = LoggerFactory.getLogger(CheckOutCustomerTest.class);
+	private  final Logger log = LoggerFactory.getLogger(CheckOutCustomerTest.class);
 
 	int responseValue;
 	String resultName;
