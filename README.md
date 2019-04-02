@@ -1,6 +1,5 @@
-# ms-shipping-cart
+# ms-shipping-cart (Microservices - distributed rest services)
 For creating docker images and running with help of docker-compose.
-
 
 -------------------
 Docker Build and Run commands:
